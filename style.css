@@ -1,8 +1,8 @@
 /* 🌞 General Styles */
 body {
     background-color:hsl(76, 100%, 50%);
-    font-family: 'Elephant', sans-serif;
-    margin: 5px;
+    font-family: 'Elephant';
+     margin: 5px;
     padding: 0px;
 }
 
@@ -57,7 +57,7 @@ body {
 
 /* 🏠 Home Text Section */
 .home {
-    color: red;
+    color:greenyellow;
     text-align: left;
     margin-top: 2rem;
     padding: 0 2rem;
