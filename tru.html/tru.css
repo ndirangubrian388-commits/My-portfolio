@@ -30,6 +30,94 @@
     padding: 20px;
     box-sizing: border-box;
   }
+  /* GENERAL RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #0d0d0d, #1c1c1c);
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  min-height: 100vh;
+}
+
+/* WRAP STYLING */
+.wrap {
+  width: 95%;
+  max-width: 1100px;
+  background: #d7a86e; /* wood base */
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0px 8px 25px rgba(0,0,0,0.5);
+
+  /* WOOD FLOOR EFFECT */
+  background: repeating-linear-gradient(
+    90deg,
+    #d7a86e 0px,
+    #d7a86e 40px,
+    #c89666 40px,
+    #c89666 80px
+  );
+}
+
+/* COURT LINES */
+.outer-line,
+.line,
+.backboard {
+  stroke: white;
+  stroke-width: 4;
+  fill: none;
+}
+
+.paint {
+  stroke: white;
+  stroke-width: 4;
+  fill: rgba(255,255,255,0.08);
+}
+
+.dashed {
+  stroke-dasharray: 12;
+}
+
+.hoop {
+  stroke: #ff4500;
+  stroke-width: 4;
+  fill: none;
+}
+
+.three-arc {
+  stroke: white;
+  stroke-width: 4;
+  fill: none;
+}
+
+/* CENTER DOT */
+.center-dot {
+  fill: white;
+}
+
+/* LABEL */
+.label {
+  font-size: 28px;
+  fill: white;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+/* OPTIONAL HOVER EFFECT */
+svg:hover {
+  transform: scale(1.01);
+  transition: 0.3s ease-in-out;
+  filter: brightness(1.1);
+}
+
 
   /* keep SVG full size of container */
   svg{
