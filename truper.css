@@ -1,0 +1,99 @@
+  :root{
+    --court-width: 1000px;     /* logical width for layout — scales with viewport */
+    --court-aspect: 0.5625;    /* height = width * aspect (1000 * 0.5625 = 562) */
+    --wood1: blue;
+    --wood2: red;
+    --line-color: yellow;
+    --paint-fill: rgba(255,255,255,0.06);
+    --accent: #ff7f1a; /* orange accent for three-point/hoop if desired */
+  }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#ff7f1a;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color:blue;
+  }
+
+  .wrap{
+    width: min(95vw, var(--court-width));
+    /* compute height from aspect */
+    height: calc(min(95vw, var(--court-width)) * var(--court-aspect));
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #2b2b2b 0%, #222 100%);
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  /* keep SVG full size of container */
+  svg{
+    width:100%;
+    height:100%;
+    display:block;
+    border-radius: 8px;
+    background: linear-gradient(180deg, var(--wood1) 0%, var(--wood2) 100%);
+  }
+
+  /* thin outer border */
+  .outer-line{
+    stroke: var(--line-color);
+    stroke-width: 4;
+    fill: none;
+  }
+
+  .line{
+    stroke: var(--line-color);
+    stroke-width: 3;
+    fill: none;
+    vector-effect: non-scaling-stroke;
+  }
+
+  .dashed{
+    stroke-dasharray: 10 8;
+  }
+
+  .paint{
+    fill: var(--paint-fill);
+    stroke: var(--line-color);
+    stroke-width: 2;
+  }
+
+  .hoop{
+    fill: none;
+    stroke: blue;
+    stroke-width: 4;
+  }
+
+  .backboard{
+    stroke:red;
+    stroke-width: 6;
+  }
+
+  .center-dot{
+    fill:black;
+  }
+
+  .three-arc{
+    stroke: var(--line-color);
+    stroke-width: 3;
+    fill: none;
+  }
+
+  /* court labels (optional) */
+  .label{
+    fill: rgba(255,255,255,0.8);
+    font-size: 12px;
+  }
+
+  /* Responsive tweak: smaller stroke widths on narrow containers */
+  @media (max-width:520px){
+    .outer-line{ stroke-width: 3; }
+    .line{ stroke-width: 2; }
+    .hoop{ stroke-width: 3; }
+  }
