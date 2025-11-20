@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloth Collection</title>
+  
+  <style>
+    :root{
+      --bg:#f7f8fb; --card:#ffffff; --accent:#ff6b6b; --muted:#6b7280; --glass: rgba(255,255,255,0.6);
+      --shadow: 0 6px 18px rgba(16,24,40,0.08);
+      --radius: 14px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; background:linear-gradient(180deg,#eef2ff 0%, var(--bg) 60%); color:#0f172a;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    header{
+      padding:28px 24px; display:flex; gap:16px; align-items:center; justify-content:space-between; max-width:1200px; margin:0 auto;
+    }
+    .logo{display:flex; gap:12px; align-items:center}
+    .logo .mark{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#ff8a5b);box-shadow:var(--shadow);display:grid;place-items:center;color:#fff;font-weight:700}
+    .logo h1{font-size:18px;margin:0}
+    .controls{display:flex;gap:10px;align-items:center}
+    .search{padding:10px 12px;border-radius:12px;border:1px solid #e6e9ef;background:var(--glass);min-width:220px}
+    .filters{display:flex;gap:8px;align-items:center}
+    .chip{padding:8px 12px;border-radius:999px;background:#fff;border:1px solid #eef2ff;cursor:pointer;font-size:14px;color:var(--muted)}
+    .chip.active{background:var(--accent);color:#fff;border-color:transparent;box-shadow:0 6px 18px rgba(255,107,107,0.18)}
+
+    main{max-width:1200px;margin:20px auto;padding:0 24px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+
+    .card{background:var(--card);border-radius:12px;padding:12px;border:1px solid rgba(15,23,42,0.03);box-shadow:var(--shadow);transition:transform .18s ease, box-shadow .18s ease;display:flex;flex-direction:column}
+    .card:hover{transform:translateY(-6px)}
+    .thumb{border-radius:10px;overflow:hidden;aspect-ratio:1.2/1;background:#f3f4f6;display:grid;place-items:center}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+    .meta{padding:10px 6px 6px 6px;display:flex;flex-direction:column;gap:6px}
+    .title{font-weight:600; font-size:15px}
+    .price{color:var(--accent);font-weight:700}
+    .row{display:flex;justify-content:space-between;align-items:center}
+    .actions{display:flex;gap:8px}
+    .btn{border:none;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:600}
+    .btn.ghost{background:#fff;border:1px solid #eef2ff}
+    .btn.primary{background:var(--accent);color:#fff}
+    .badge{font-size:12px;background:#fff;padding:6px;border-radius:8px;border:1px solid #eef2ff}
+
+    /* hero filter area */
+    .hero{display:flex;gap:18px;align-items:center;background:linear-gradient(90deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));padding:18px;border-radius:14px;box-shadow:var(--shadow);}
+    .hero h2{margin:0}
+
+    /* modal */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(2,6,23,0.48);display:none;align-items:center;justify-content:center;padding:24px}
+    .modal{background:#fff;border-radius:12px;max-width:920px;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px}
+    .modal .thumb{aspect-ratio:4/3}
+    .modal .meta{padding:0}
+    .close{position:absolute;right:18px;top:18px;border-radius:999px;padding:8px;background:#fff;border:0;cursor:pointer}
+
+    /* cart */
+    .cart{position:relative}
+    .cart .count{position:absolute;right:-8px;top:-8px;background:#0f172a;color:#fff;font-size:12px;padding:4px 6px;border-radius:999px}
+
+    /* responsive */
+    @media (max-width:820px){
+      .modal{grid-template-columns:1fr}
+      header{padding:18px 14px}
+      .search{min-width:140px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <div class="mark">C</div>
+      <div>
+        <h1>Cloud & Cloth</h1>
+        <div style="font-size:12px;color:var(--muted)">Fresh & curated cloth collection</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input id="search" class="search" placeholder="Search styles, e.g. jacket, tee" />
+      <div class="filters" id="filterBar">
+        <div class="chip active" data-cat="all">All</div>
+        <div class="chip" data-cat="men">Men</div>
+        <div class="chip" data-cat="women">Women</div>
+        <div class="chip" data-cat="kids">Kids</div>
+        <div class="chip" data-cat="sale">Sale</div>
+      </div>
+      <button class="btn ghost cart" id="cartBtn">Cart <span class="count" id="cartCount">0</span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h2>Season picks — new arrivals</h2>
+        <p style="margin:6px 0 0 0;color:var(--muted)">Curated selection of 12 handpicked styles. Hover a card for quick actions.</p>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <div class="badge">Free shipping over $60</div>
+      </div>
+    </section>
+
+    <section style="margin-top:18px">
+      <div class="grid" id="productGrid">
+        <!-- products injected by JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- modal quick view -->
+  <div class="modal-backdrop" id="modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="productTitle">
+      <button class="close" id="closeModal">✕</button>
+      <div class="thumb" id="modalImage"></div>
+      <div class="meta">
+        <h3 id="productTitle">Title</h3>
+        <div id="productPrice" style="font-size:18px;margin-top:8px;color:var(--accent)">$49</div>
+        <p id="productDesc" style="color:var(--muted);margin-top:10px">Description</p>
+        <div style="margin-top:12px">
+          <label style="font-size:13px;color:var(--muted)">Size</label>
+          <div style="display:flex;gap:8px;margin-top:6px">
+            <button class="chip">S</button>
+            <button class="chip">M</button>
+            <button class="chip">L</button>
+            <button class="chip">XL</button>
+          </div>
+        </div>
+        <div style="margin-top:auto;display:flex;gap:8px;margin-top:18px">
+          <button class="btn primary" id="addToCartModal">Add to cart</button>
+          <button class="btn ghost" id="addFav">♡ Wishlist</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      {id:1,title:'Linen Summer Shirt',price:34,cat:'men',img:'https://images.unsplash.com/photo-1520975681912-8c6b9c8019b6?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=1fa5f3d5c67c8732c2c9c7ae7f7150da',desc:'Relaxed fit, breathable linen — perfect for warm days.'},
+      {id:2,title:'Classic White Tee',price:18,cat:'women',img:'https://images.unsplash.com/photo-1602810311976-c0b4f8b0b6f9?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=3bad3d9f2f6c5c4c73f2a6b3643d4e2b',desc:'Soft cotton, everyday essential.'},
+      {id:3,title:'Denim Jacket',price:78,cat:'men',img:'https://images.unsplash.com/photo-1514996937319-344454492b37?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=0e0e7b6d9c7a1a97e5be6d5f3b9e4d0d',desc:'A classic layered piece with a timeless cut.'},
+      {id:4,title:'Floral Midi Dress',price:64,cat:'women',img:'https://images.unsplash.com/photo-1520975698898-f5f8f0bcf2f1?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=90f1a2f9dcae2ed3b7d6b1f9e4a3c1b7',desc:'Lightweight, midi length — easy to dress up or down.'},
+      {id:5,title:'Kids Striped Hoodie',price:28,cat:'kids',img:'https://images.unsplash.com/photo-1520975705426-0f3f3a1fc2d2?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=4b3b4b7b5c6d7e8f9a1b2c3d4e5f6a7b',desc:'Cozy hoodie in soft fleece.'},
+      {id:6,title:'Corduroy Skirt',price:44,cat:'women',img:'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=bd67f6f3e4b7f4a8c3d2e1b6f7a8c9d0',desc:'Textured corduroy with a flattering A-line.'},
+      {id:7,title:'Oversized Hoodie',price:56,cat:'men',img:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=d2b6f7a8c3e1b6f7a8c9d0e1b2c3d4e5',desc:'Streetwear-inspired oversized fit.'},
+      {id:8,title:'Summer Shorts',price:26,cat:'men',img:'https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d',desc:'Lightweight and comfortable for active days.'},
+      {id:9,title:'Kids Denim Overalls',price:38,cat:'kids',img:'https://images.unsplash.com/photo-1503342452485-86f7e6f8b4b8?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=1f2e3d4c5b6a7d8e9f0a1b2c3d4e5f6a',desc:'Durable, cute, and easy to play in.'},
+      {id:10,title:'Striped Polo',price:32,cat:'men',img:'https://images.unsplash.com/photo-1520975707267-1a2b3c4d5e6f?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=abcdef1234567890abcdef1234567890',desc:'Smart-casual polo with comfy knit.'},
+      {id:11,title:'Wrap Blouse',price:46,cat:'women',img:'https://images.unsplash.com/photo-1520975711115-abcdeffedcba?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=123456abcdef7890abcdef1234567890',desc:'Elegant wrap top with flattering tie.'},
+      {id:12,title:'Sale: Vintage Tee',price:12,cat:'sale',img:'https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&s=0a1b2c3d4e5f67890abcdef123456789',desc:'Soft vintage-wash tee — limited stock.'}
+    ];
+
+    const grid = document.getElementById('productGrid');
+    const search = document.getElementById('search');
+    const filterBar = document.getElementById('filterBar');
+    const chips = [...document.querySelectorAll('.chip')];
+    const modal = document.getElementById('modal');
+    const modalImage = document.getElementById('modalImage');
+    const productTitle = document.getElementById('productTitle');
+    const productPrice = document.getElementById('productPrice');
+    const productDesc = document.getElementById('productDesc');
+    const closeModal = document.getElementById('closeModal');
+    const addToCartModal = document.getElementById('addToCartModal');
+    const cartCount = document.getElementById('cartCount');
+
+    let activeCat = 'all';
+    let cart = [];
+
+    function renderProducts(list){
+      grid.innerHTML = '';
+      for(const p of list){
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.innerHTML = `
+          <div class="thumb"><img loading="lazy" src="${p.img}" alt="${p.title}"/></div>
+          <div class="meta">
+            <div class="row"><div class="title">${p.title}</div><div class="price">$${p.price}</div></div>
+            <div style="color:var(--muted);font-size:13px">${p.desc}</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+              <div class="actions">
+                <button class="btn ghost" data-id="${p.id}" onclick="openQuick(${p.id})">Quick view</button>
+                <button class="btn" onclick="addToCart(${p.id})">Add</button>
+              </div>
+              <div style="font-size:12px;color:var(--muted)">Category: ${p.cat}</div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(el);
+      }
+    }
+
+    function openQuick(id){
+      const p = products.find(x=>x.id===id);
+      if(!p) return;
+      modalImage.innerHTML = `<img src="${p.img}" alt="${p.title}" style="width:100%;height:100%;object-fit:cover;border-radius:8px"/>`;
+      productTitle.textContent = p.title;
+      productPrice.textContent = '$' + p.price;
+      productDesc.textContent = p.desc;
+      modal.style.display = 'flex';
+      addToCartModal.onclick = ()=>{ addToCart(id); }
+    }
+
+    closeModal.onclick = ()=> modal.style.display='none';
+    modal.onclick = (e)=>{ if(e.target===modal) modal.style.display='none'; }
+
+    function addToCart(id){
+      const p = products.find(x=>x.id===id);
+      if(!p) return;
+      cart.push(p);
+      cartCount.textContent = cart.length;
+      // tiny animation: flash cart
+      const btn = document.getElementById('cartBtn');
+      btn.animate([{transform:'scale(1)'},{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:240});
+    }
+
+    // filtering
+    filterBar.addEventListener('click', (e)=>{
+      const chip = e.target.closest('.chip');
+      if(!chip) return;
+      chips.forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      activeCat = chip.dataset.cat;
+      applyFilters();
+    });
+
+    search.addEventListener('input', ()=> applyFilters());
+
+    function applyFilters(){
+      const q = search.value.trim().toLowerCase();
+      let filtered = products.filter(p=>{
+        const matchCat = activeCat==='all' ? true : p.cat===activeCat;
+        const matchQ = q ? (p.title.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q)) : true;
+        return matchCat && matchQ;
+      });
+      renderProducts(filtered);
+    }
+
+    // initial
+    renderProducts(products);
+
+    // expose quick functions to global for onclicks inside generated html
+    window.openQuick = openQuick;
+    window.addToCart = addToCart;
+
+  </script>
+</body>
+</html>
