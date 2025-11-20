@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROCK PAPER SCISSORS</title>
+
+    <style>
+        body { 
+            font-family: 'Courier New', Courier, monospace;
+            background-color:green;
+            color: yellow;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin-bottom: 25px;
+            text-shadow: 0 0 10px yellow, 0 0 20px orange;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px yellow; }
+            to { text-shadow: 0 0 20px gold; }
+        }
+
+        button {
+            font-size: 22px;
+            margin: 12px;
+            padding: 12px 30px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            background-color: black;
+            color: aqua;
+            transition: 0.3s;
+            box-shadow: 0 0 10px black;
+        }
+
+        button:hover {
+            background-color: yellow;
+            color: black;
+            transform: scale(1.1);
+            box-shadow: 0 0 20px gold;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        h2 {
+            margin-top: 30px;
+            font-size: 28px;
+            text-shadow: 0 0 10px black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>ROCK PAPER SCISSORS</h1>
+
+    <button onclick="playgame('rock')">🪨 Rock</button>
+    <button onclick="playgame('paper')">📄 Paper</button>
+    <button onclick="playgame('scissors')">✂️ Scissors</button>
+
+    <h2 id="playerChoice"></h2>
+    <h2 id="computerChoice"></h2>
+
+    <script>
+        function playgame(playerChoice) {
+
+            let computerChoice;
+            let rand = Math.random();
+
+            if (rand < 0.3) {
+                computerChoice = 'rock';
+            }
+            else if (rand < 0.6) {
+                computerChoice = 'paper';
+            }
+            else {
+                computerChoice = 'scissors';
+            }
+
+            let PlayerWins =
+                (playerChoice === 'rock' && computerChoice === 'scissors') ||
+                (playerChoice === 'paper' && computerChoice === 'rock') ||
+                (playerChoice === 'scissors' && computerChoice === 'paper');
+
+            document.getElementById('playerChoice').innerText =
+                "You chose: " + playerChoice + " " +
+                (playerChoice === 'rock' ? "🪨" : playerChoice === 'paper' ? "📄" : "✂️");
+
+            document.getElementById('computerChoice').innerText =
+                "Computer picked: " + computerChoice + " " +
+                (computerChoice === 'rock' ? "🪨" : computerChoice === 'paper' ? "📄" : "✂️");
+        }
+    </script>
+
+</body>
+</html>
