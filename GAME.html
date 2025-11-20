@@ -68,8 +68,12 @@
 
     <h2 id="playerChoice"></h2>
     <h2 id="computerChoice"></h2>
+    <!-- Score Display -->
+    <h2 id="score">Score: 0</h2>
 
     <script>
+        let score = 0;
+
         function playgame(playerChoice) {
 
             let computerChoice;
@@ -90,6 +94,15 @@
                 (playerChoice === 'paper' && computerChoice === 'rock') ||
                 (playerChoice === 'scissors' && computerChoice === 'paper');
 
+            let draw = playerChoice === computerChoice;
+
+            // Update score
+            if (PlayerWins) {
+                score++;
+            } else if (!draw) {
+                score--;
+            }
+
             document.getElementById('playerChoice').innerText =
                 "You chose: " + playerChoice + " " +
                 (playerChoice === 'rock' ? "🪨" : playerChoice === 'paper' ? "📄" : "✂️");
@@ -97,7 +110,11 @@
             document.getElementById('computerChoice').innerText =
                 "Computer picked: " + computerChoice + " " +
                 (computerChoice === 'rock' ? "🪨" : computerChoice === 'paper' ? "📄" : "✂️");
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> 58d4434 (score)
             document.getElementById('score').innerText = "Score: " + score;
         }
     </script>
