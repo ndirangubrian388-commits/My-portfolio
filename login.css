@@ -1,0 +1,44 @@
+body{ 
+    text-align: center;
+    background-color: yellow;
+    font-family: elephant;
+}
+h1{
+    color:red;
+    font-size: 50px;
+}
+input{
+    font-size: 20px;
+    margin: 10px;
+}
+button{
+    font-size: 20px;
+    background-color: red;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+button:hover{
+    background-color: green;
+    color:aqua;
+}
+a{
+    text-decoration: none;
+    color: blue;
+}
+a:hover{
+    color:red;
+}
+form{
+    margin-top: 50px;
+}
+label{
+    font-size: 25px;
+}
+.container{
+    margin-top: 100px;
+}
+.error{
+    color: red;
+    font-size: 20px;
+}
