@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mental Health Checkup – Extended</title>
+<link rel="stylesheet" href="mental.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Mental Health Checkup</h2>
+    <h3>Extended 8-Question Assessment</h3>
+
+    <form id="checkupForm">
+
+        <div class="question">
+            <label>1. How often do you feel stressed?</label>
+            <select name="stress">
+                <option value="1">Rarely</option>
+                <option value="2">Sometimes</option>
+                <option value="3">Often</option>
+                <option value="4">Always</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>2. How often do you feel anxious?</label>
+            <select name="anxiety">
+                <option value="1">Rarely</option>
+                <option value="2">Sometimes</option>
+                <option value="3">Often</option>
+                <option value="4">Always</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>3. How has your overall mood been recently?</label>
+            <select name="mood">
+                <option value="1">Very Good</option>
+                <option value="2">Good</option>
+                <option value="3">Neutral</option>
+                <option value="4">Bad</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>4. How is your sleep quality?</label>
+            <select name="sleep">
+                <option value="1">Very Good</option>
+                <option value="2">Good</option>
+                <option value="3">Poor</option>
+                <option value="4">Very Poor</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>5. How are your energy levels?</label>
+            <select name="energy">
+                <option value="1">High</option>
+                <option value="2">Good</option>
+                <option value="3">Low</option>
+                <option value="4">Very Low</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>6. How motivated do you feel?</label>
+            <select name="motivation">
+                <option value="1">Very Motivated</option>
+                <option value="2">Motivated</option>
+                <option value="3">Unmotivated</option>
+                <option value="4">Very Unmotivated</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>7. How is your concentration?</label>
+            <select name="concentration">
+                <option value="1">Very Good</option>
+                <option value="2">Good</option>
+                <option value="3">Poor</option>
+                <option value="4">Very Poor</option>
+            </select>
+        </div>
+
+        <div class="question">
+            <label>8. How is your appetite?</label>
+            <select name="appetite">
+                <option value="1">Very Good</option>
+                <option value="2">Good</option>
+                <option value="3">Poor</option>
+                <option value="4">Very Poor</option>
+            </select>
+        </div>
+
+        <button type="button" onclick="generateResults()">Submit</button>
+    </form>
+
+    <div id="results"></div>
+
+    <canvas id="chart" style="margin-top: 30px;"></canvas>
+</div>
+
+<script>
+let chartInstance = null;
+
+function generateResults() {
+    const form = document.getElementById("checkupForm");
+
+    // Values
+    const dataValues = [
+        parseInt(form.stress.value),
+        parseInt(form.anxiety.value),
+        parseInt(form.mood.value),
+        parseInt(form.sleep.value),
+        parseInt(form.energy.value),
+        parseInt(form.motivation.value),
+        parseInt(form.concentration.value),
+        parseInt(form.appetite.value)
+    ];
+
+    const totalScore = dataValues.reduce((a, b) => a + b, 0);
+    const maxScore = 8 * 4;
+
+    let message = "";
+    if (totalScore <= 12) {
+        message = "Your mental health looks stable. Keep up your healthy habits.";
+    } else if (totalScore <= 20) {
+        message = "Moderate mental strain detected. Consider improving rest and routine.";
+    } else {
+        message = "High stress levels detected. It may help to talk to a counselor or mental health professional.";
+    }
+
+    document.getElementById("results").innerHTML =
+        `<strong>Your Score:</strong> ${totalScore} / ${maxScore}<br><br>${message}`;
+
+    createChart(dataValues);
+}
+
+function createChart(values) {
+
+    const labels = [
+        "Stress", "Anxiety", "Mood", "Sleep",
+        "Energy", "Motivation", "Concentration", "Appetite"
+    ];
+
+    const ctx = document.getElementById("chart");
+
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Your Levels",
+                data: values,
+                backgroundColor: [
+                    "#ff7675", "#74b9ff", "#55efc4", "#ffeaa7",
+                    "#fab1a0", "#a29bfe", "#81ecec", "#fd79a8"
+                ],
+                borderColor: "#333",
+                borderWidth: 2
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true, max: 4 }
+            }
+        }
+    });
+}
+</script>
+
+</body>
+</html>

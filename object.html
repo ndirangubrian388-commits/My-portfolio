@@ -10,9 +10,12 @@
         let brian = {
             name: "Brian",
             age: 30,
-            job: "Developer"
+            job: "Developer",
+            brian: function(){
+                console.log("Brian's data ID is 12345");    
+            }
         };
-        console.log(brian.age);
+        brian: brian.dataID();
 
         // create an  object for  a ball
         let ball={
