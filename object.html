@@ -7,23 +7,29 @@
 </head>
 <body>
     <script>
-        let brian = {
-            name: "Brian",
-            age: 30,
-            job: "Developer",
-            brian: function(){
-                console.log("Brian's data ID is 12345");    
-            }
-        };
-        brian: brian.dataID();
+    // object =A collcetion of related properties and/or methods
+    let person = {
+        firstName: "john",
+        lastName: "doe",
+        age: 25,
+        fullName: function(){
+            return this.firstName + " " + this.age;
+        }
+    };
 
-        // create an  object for  a ball
-        let ball={
-            color: "red",
-            size: "large",
-            type: "soccer ball"
-        };
-        console.log(ball.type);
+    console.log(person.fullName());
+    
+      
+       // add 2 numbers
+
+       function addnumbers(x , y){
+        let sum =x+y;
+        return sum;
+
+       }
+       let sum=(900 +100);
+       console.log(sum);
+
 
     </script>
 </body>
